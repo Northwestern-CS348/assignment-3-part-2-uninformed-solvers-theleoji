@@ -16,3 +16,35 @@ fact: (pred obj1 obj2)
 rule: ((pred obj1 obj2) (pred obj2 obj3)) -> (pred obj1 obj3)
 
 """
+fact: (on disk1 peg1)
+fact: (on disk2 peg1)
+fact: (on disk3 peg1)
+fact: (on nothing peg2)
+fact: (on nothing peg3)
+
+fact: (not peg1 peg2)
+fact: (not peg2 peg1)
+fact: (not peg2 peg3)
+fact: (not peg3 peg2)
+fact: (not peg1 peg3)
+fact: (not peg3 peg1)
+
+rule: ((on disk1 ?x) (on nothing ?y)) -> (movable disk1 ?x ?y)
+rule: ((on disk1 ?x) (on disk2 ?y) (not ?x ?y)) -> (movable disk1 ?x ?y)
+rule: ((on disk1 ?x) (on disk3 ?y) (not ?x ?y)) -> (movable disk1 ?x ?y)
+rule: ((on disk1 ?x) (on disk4 ?y) (not ?x ?y)) -> (movable disk1 ?x ?y)
+rule: ((on disk1 ?x) (on disk5 ?y) (not ?x ?y)) -> (movable disk1 ?x ?y)
+
+rule: ((on disk2 ?x) (on nothing ?y) (on disk1 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk2 ?x ?y)
+rule: ((on disk2 ?x) (on disk3 ?y) (on disk1 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk2 ?x ?y)
+rule: ((on disk2 ?x) (on disk4 ?y) (on disk1 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk2 ?x ?y)
+rule: ((on disk2 ?x) (on disk5 ?y) (on disk1 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk2 ?x ?y)
+
+rule: ((on disk3 ?x) (on nothing ?y) (on disk1 ?z) (on disk2 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk3 ?x ?y)
+rule: ((on disk3 ?x) (on disk4 ?y) (on disk1 ?z) (on disk2 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk3 ?x ?y)
+rule: ((on disk3 ?x) (on disk5 ?y) (on disk1 ?z) (on disk2 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk3 ?x ?y)
+
+rule: ((on disk4 ?x) (on nothing ?y) (on disk1 ?z) (on disk2 ?z) (on disk3 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk4 ?x ?y)
+rule: ((on disk4 ?x) (on disk5 ?y) (on disk1 ?z) (on disk2 ?z) (on disk3 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk4 ?x ?y)
+
+rule: ((on disk5 ?x) (on nothing ?y) (on disk1 ?z) (on disk2 ?z) (on disk3 ?z) (on disk4 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk5 ?x ?y)
