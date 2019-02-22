@@ -90,7 +90,7 @@ class TowerOfHanoiGame(GameMaster):
         fretract = parse_input("fact: (on " + sl[0].term.element + " " + sl[1].term.element + ")")
         fadd = parse_input("fact: (on " + sl[0].term.element + " " + sl[2].term.element + ")")
         self.kb.kb_retract(fretract)
-        self.kb.kb_add(fadd)
+        self.kb.kb_assert(fadd)
 
     def reverseMove(self, movable_statement):
         """
@@ -194,15 +194,15 @@ class Puzzle8Game(GameMaster):
 
         sl = movable_statement.terms
 
-        tretract = parse_input("fact: (pos " + sl[0].term.element + " " + sl[1].term.element + " " + sl[2].term.element + ")")
         tadd = parse_input("fact: (pos " + sl[0].term.element + " " + sl[3].term.element + " " + sl[4].term.element + ")")
-        self.kb.kb_retract(tretract)
-        self.kb.kb_add(tadd)
-
-        eadd = parse_input("fact: (pos empty " + sl[1].term.element + " " + sl[2].term.element + ")")
         eretract = parse_input("fact: (pos empty " + sl[3].term.element + " " + sl[4].term.element + ")")
+
+        tretract = parse_input("fact: (pos " + sl[0].term.element + " " + sl[1].term.element + " " + sl[2].term.element + ")")
+        eadd = parse_input("fact: (pos empty " + sl[1].term.element + " " + sl[2].term.element + ")")
         self.kb.kb_retract(eretract)
-        self.kb.kb_add(eadd)
+        self.kb.kb_retract(tretract)
+        self.kb.kb_assert(eadd)
+        self.kb.kb_assert(tadd)
 
     def reverseMove(self, movable_statement):
         """

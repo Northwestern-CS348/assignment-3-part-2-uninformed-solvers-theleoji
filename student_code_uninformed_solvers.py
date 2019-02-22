@@ -29,6 +29,9 @@ class SolverDFS(UninformedSolver):
             print("    looking at move", moveNumber)
             if moveNumber >= len(movables):
                 return False
+            if not self.gm.isMovableLegal(movables[moveNumber]):
+                print ("    invalid move, trying move", moveNumber + 1)
+                return findMove(movables, moveNumber + 1)
             self.gm.makeMove(movables[moveNumber])
             tryThisGameState = GameState(self.gm.getGameState(), self.currentState.depth, movables[moveNumber])
             self.gm.reverseMove(movables[moveNumber])
@@ -36,7 +39,8 @@ class SolverDFS(UninformedSolver):
                 print ("    visited, trying move", moveNumber + 1)
                 return findMove(movables, moveNumber + 1)
             else:
-                print("    found move as", moveNumber)
+                print("    found valid unvisited move", moveNumber)
+                print("    move is", movables[moveNumber])
                 return movables[moveNumber]
 
         # setToParent (GameState)
