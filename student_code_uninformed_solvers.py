@@ -22,49 +22,56 @@ class SolverDFS(UninformedSolver):
             True if the desired solution state is reached, False otherwise
         """
 
-        print(self.gm.getGameState())
+        # findMove (listofMovables, int)
+        # returns a move that we should use
+        # if there is no move to make, then returns False
+        def findMove(movables, moveNumber):
+            print("    looking at move", moveNumber)
+            if moveNumber >= len(movables):
+                return False
+            self.gm.makeMove(movables[moveNumber])
+            tryThisGameState = GameState(self.gm.getGameState(), self.currentState.depth, movables[moveNumber])
+            self.gm.reverseMove(movables[moveNumber])
+            if self.visited.get(tryThisGameState):
+                print ("    visited, trying move", moveNumber + 1)
+                return findMove(movables, moveNumber + 1)
+            else:
+                print("    found move as", moveNumber)
+                return movables[moveNumber]
 
-        if self.currentState.state == self.victoryCondition:
-            # yay, we found it
-            return True
-
-        movables = self.gm.getMovables()
-        currentGameState = self.currentState
-        nextMove = currentGameState.nextChildToVisit
-
-        # are there no more children?
-        if nextMove >= len(movables):
-            print ("  run out of children, going up")
-            print ("  self.gm: ", self.gm.getGameState())
-            print ("  cgs:     ", currentGameState.state)
-            # print ("next:    ", nextGameState.state)
+        # setToParent (GameState)
+        # sets all current conditions to that of the parent
+        def setToParent():
+            print("    up to parent")
             self.currentState = self.currentState.parent
+            self.gm.reverseMove(self.currentState.requiredMovable)
             self.currentState.nextChildToVisit = self.currentState.nextChildToVisit + 1
 
-        else:
-        #     otherwise, we have kids!
-        #     ok, let's make the move
-            self.gm.makeMove(movables[nextMove])
-            nextGameState = GameState(self.currentState.state, self.currentState.depth + 1, movables[nextMove])
-            self.currentState = nextGameState
-        #     have we visited this?
-            if self.visited.get(nextGameState):
-                # yes, it's previously visited
-                print("  visited, next")
-                self.gm.reverseMove(movables[nextMove])
-                self.currentState = currentGameState
-                self.currentState.nextChildToVisit = currentGameState.nextChildToVisit + 1
-                nextMove =
-                currentGameState = self.currentState
-            else:
-        #         no, this is a new game state
-                print("  new, down")
-                nextGameState.parent = currentGameState
-                currentGameState.children.append(nextGameState)
-                self.currentState = nextGameState
-                self.visited[nextGameState] = True
+        def makeMove(shouldMove):
+            print("    making a move")
+            currentGameState = self.currentState
+            self.gm.makeMove(shouldMove)
+            newGameState = GameState(self.gm.getGameState(), currentGameState.depth + 1, shouldMove)
+            newGameState.parent = currentGameState
+            currentGameState.children.append(newGameState)
+            self.visited[newGameState] = True
+            self.currentState = newGameState
+
+        def makeStep():
+            print(self.gm.getGameState())
+            movables = self.gm.getMovables()
+            if self.currentState.state == self.victoryCondition:
+                # yay, we found it
+                return True
+            shouldMove = findMove(movables, 0)
+            if shouldMove:
+                makeMove(shouldMove)
                 return False
-        return False
+            else:
+                setToParent()
+                makeStep()
+
+        return makeStep()
 
 
 

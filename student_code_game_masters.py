@@ -89,7 +89,7 @@ class TowerOfHanoiGame(GameMaster):
         pred = movable_statement.predicate
         sl = movable_statement.terms
         fretract = parse_input("fact: (on " + sl[0].term.element + " " + sl[1].term.element + ")")
-        fadd = parse_input("fact: on " + sl[0].term.element + " " + sl[2].term.element + ")")
+        fadd = parse_input("fact: (on " + sl[0].term.element + " " + sl[2].term.element + ")")
         self.kb.kb_retract(fretract)
         self.kb.kb_add(fadd)
 
@@ -137,8 +137,44 @@ class Puzzle8Game(GameMaster):
         Returns:
             A Tuple of Tuples that represent the game state
         """
-        ### Student code goes here
-        pass
+
+        f1 = parse_input("fact: (pos ?tile ?col pos1)")
+        bindings_row1 = self.kb.kb_ask(f1)
+        v = ""
+        list1 = [0]*3
+        if bindings_row1:
+            for b in bindings_row1:
+                if b.bindings[0].constant.element == 'empty':
+                    list1[int(b.bindings[1].constant.element[3]) -1] = -1
+                    continue
+                v = b.bindings[0].constant.element[4]
+                list1[int(b.bindings[1].constant.element[3]) -1] = int(v)
+
+        f2 = parse_input("fact: (pos ?tile ?col pos2)")
+        bindings_row2 = self.kb.kb_ask(f2)
+        v = ""
+        list2 = [0]*3
+        if bindings_row2:
+            for b in bindings_row2:
+                if b.bindings[0].constant.element == 'empty':
+                    list2[int(b.bindings[1].constant.element[3]) -1] = -1
+                    continue
+                v = b.bindings[0].constant.element[4]
+                list2[int(b.bindings[1].constant.element[3]) -1] = int(v)
+
+        f3 = parse_input("fact: (pos ?tile ?col pos3)")
+        bindings_row3 = self.kb.kb_ask(f3)
+        v = ""
+        list3 = [0]*3
+        if bindings_row3:
+            for b in bindings_row3:
+                if b.bindings[0].constant.element == 'empty':
+                    list3[int(b.bindings[1].constant.element[3]) -1] = -1
+                    continue
+                v = b.bindings[0].constant.element[4]
+                list3[int(b.bindings[1].constant.element[3]) -1] = int(v)
+
+        return (tuple(list1), tuple(list2), tuple(list3))
 
     def makeMove(self, movable_statement):
         """
@@ -156,8 +192,18 @@ class Puzzle8Game(GameMaster):
         Returns:
             None
         """
-        ### Student code goes here
-        pass
+
+        sl = movable_statement.terms
+
+        tretract = parse_input("fact: (pos " + sl[0].term.element + " " + sl[1].term.element + " " + sl[2].term.element + ")")
+        tadd = parse_input("fact: (pos " + sl[0].term.element + " " + sl[3].term.element + " " + sl[4].term.element + ")")
+        self.kb.kb_retract(tretract)
+        self.kb.kb_add(tadd)
+
+        eadd = parse_input("fact: (pos empty " + sl[1].term.element + " " + sl[2].term.element + ")")
+        eretract = parse_input("fact: (pos empty " + sl[3].term.element + " " + sl[4].term.element + ")")
+        self.kb.kb_retract(eretract)
+        self.kb.kb_add(eadd)
 
     def reverseMove(self, movable_statement):
         """
