@@ -16,7 +16,6 @@ class TowerOfHanoiGame(GameMaster):
         """
         return parse_input('fact: (movable ?disk ?init ?target)')
 
-    @property
     def getGameState(self):
         """
         Returns a representation of the game in the current state.
