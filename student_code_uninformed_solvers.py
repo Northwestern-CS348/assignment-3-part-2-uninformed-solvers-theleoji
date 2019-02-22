@@ -18,8 +18,24 @@ class SolverDFS(UninformedSolver):
         Returns:
             True if the desired solution state is reached, False otherwise
         """
-        ### Student code goes here
-        return True
+        thisState = self.currentState
+        self.visited[self.currentState] = True
+        movables = self.gm.getMovables()
+        if thisState.nextChildToVisit < len(movables):
+            move = movables[thisState.nextChildToVisit]
+        else:
+            self.currentState.nextChildToVisit = thisState.nextChildToVisit + 1
+            return False
+        self.gm.makeMove(move)
+        if self.currentState.state == self.victoryCondition:
+            return True
+        else:
+            nextGameState = GameState(self.gm.getGameState, thisState.depth + 1, move)
+            thisState.children.append(nextGameState)
+            # thisState.nextChildToVisit = thisState.nextChildToVisit
+            nextGameState.parent = thisState
+            return False
+
 
 
 class SolverBFS(UninformedSolver):

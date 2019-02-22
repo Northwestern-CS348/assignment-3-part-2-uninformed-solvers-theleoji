@@ -25,7 +25,7 @@ class KBTest(unittest.TestCase):
             while self.lastEndStep < x:
                 solver.solveOneStep()
                 self.lastEndStep += 1
-            res.append(solver.gm.getGameState())
+            res.append(solver.gm.getGameState)
         return res
 
     def solve(self, solver):
@@ -79,11 +79,11 @@ class KBTest(unittest.TestCase):
         self.assertFalse(th.isWon())
 
         movables = th.getMovables()
-        self.assertEqual(th.getGameState(), ((1,2,3),(),()))
+        self.assertEqual(th.getGameState, ((1, 2, 3), (), ()))
         th.makeMove(movables[0])
-        self.assertEqual(th.getGameState(), ((2,3),(1,),()))
+        self.assertEqual(th.getGameState, ((2, 3), (1,), ()))
         th.reverseMove(movables[0])
-        self.assertEqual(th.getGameState(), ((1,2,3),(),()))
+        self.assertEqual(th.getGameState, ((1, 2, 3), (), ()))
 
     def test02_DFS_Hanoi(self):
         th = TowerOfHanoiGame()

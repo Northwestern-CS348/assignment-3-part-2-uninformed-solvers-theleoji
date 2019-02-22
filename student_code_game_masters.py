@@ -16,6 +16,7 @@ class TowerOfHanoiGame(GameMaster):
         """
         return parse_input('fact: (movable ?disk ?init ?target)')
 
+    @property
     def getGameState(self):
         """
         Returns a representation of the game in the current state.
@@ -33,8 +34,41 @@ class TowerOfHanoiGame(GameMaster):
         Returns:
             A Tuple of Tuples that represent the game state
         """
-        ### student code goes here
-        pass
+        f1 = parse_input("fact: (on ?disk peg1)")
+        bindings_peg1 = self.kb.kb_ask(f1)
+        v = ""
+        list1 = [ ]
+        if bindings_peg1:
+            for b in bindings_peg1:
+                if b.bindings[0].constant.element == 'nothing':
+                    continue
+                v = b.bindings[0].constant.element[4]
+                list1.append(int(v))
+
+        f2 = parse_input("fact: (on ?disk peg2)")
+        bindings_peg2 = self.kb.kb_ask(f2)
+        v = ""
+        list2 = []
+        if bindings_peg2:
+            for b in bindings_peg2:
+                if b.bindings[0].constant.element == 'nothing':
+                    continue
+                v = b.bindings[0].constant.element[4]
+                list2.append(int(v))
+
+        f3 = parse_input("fact: (on ?disk peg3)")
+        bindings_peg3 = self.kb.kb_ask(f3)
+        v = ""
+        list3 = []
+        if bindings_peg3:
+            for b in bindings_peg3:
+                if b.bindings[0].constant.element == 'nothing':
+                    continue
+                v = b.bindings[0].constant.element[4]
+                list3.append(int(v))
+
+
+        return (tuple(sorted(list1)), tuple(sorted(list2)), tuple(sorted(list3)))
 
     def makeMove(self, movable_statement):
         """
@@ -52,8 +86,13 @@ class TowerOfHanoiGame(GameMaster):
         Returns:
             None
         """
-        ### Student code goes here
-        pass
+
+        pred = movable_statement.predicate
+        sl = movable_statement.terms
+        fretract = parse_input("fact: (on " + sl[0].term.element + " " + sl[1].term.element + ")")
+        fadd = parse_input("fact: on " + sl[0].term.element + " " + sl[2].term.element + ")")
+        self.kb.kb_retract(fretract)
+        self.kb.kb_add(fadd)
 
     def reverseMove(self, movable_statement):
         """
