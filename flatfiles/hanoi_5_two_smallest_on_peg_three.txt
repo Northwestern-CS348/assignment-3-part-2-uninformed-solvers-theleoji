@@ -35,22 +35,15 @@ fact: (not peg1 peg3)
 fact: (not peg3 peg1)
 
 
-rule: ((on disk1 ?x) (on nothing ?y)) -> (movable disk1 ?x ?y)
-rule: ((on disk1 ?x) (on disk2 ?y) (not ?x ?y)) -> (movable disk1 ?x ?y)
-rule: ((on disk1 ?x) (on disk3 ?y) (not ?x ?y)) -> (movable disk1 ?x ?y)
-rule: ((on disk1 ?x) (on disk4 ?y) (not ?x ?y)) -> (movable disk1 ?x ?y)
-rule: ((on disk1 ?x) (on disk5 ?y) (not ?x ?y)) -> (movable disk1 ?x ?y)
+rule: ((on disk1 ?peg)) -> (top disk1 ?peg)
+rule: ((on disk2 ?peg) (on disk1 ?peg2) (not ?peg ?peg2)) -> (top disk2 ?peg)
+rule: ((on disk3 ?peg) (on disk1 ?peg2) (on disk2 ?peg3) (not ?peg ?peg2) (not ?peg ?peg3)) -> (top disk3 ?peg)
+rule: ((on disk3 ?peg) (on disk1 ?peg2) (on disk2 ?peg2) (not ?peg ?peg2)) -> (top disk3 ?peg)
+rule: ((on disk4 ?peg) (on disk1 ?peg2) (on disk2 ?peg2) (on disk3 ?peg2) (not ?peg ?peg2)) -> (top disk4 ?peg)
+rule: ((on disk5 ?peg) (on disk1 ?peg2) (on disk2 ?peg2) (on disk3 ?peg2) (on disk4 ?peg2) (not ?peg ?peg2)) -> (top disk4 ?peg)
 
-rule: ((on disk2 ?x) (on nothing ?y) (on disk1 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk2 ?x ?y)
-rule: ((on disk2 ?x) (on disk3 ?y) (on disk1 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk2 ?x ?y)
-rule: ((on disk2 ?x) (on disk4 ?y) (on disk1 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk2 ?x ?y)
-rule: ((on disk2 ?x) (on disk5 ?y) (on disk1 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk2 ?x ?y)
-
-rule: ((on disk3 ?x) (on nothing ?y) (on disk1 ?z) (on disk2 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk3 ?x ?y)
-rule: ((on disk3 ?x) (on disk4 ?y) (on disk1 ?z) (on disk2 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk3 ?x ?y)
-rule: ((on disk3 ?x) (on disk5 ?y) (on disk1 ?z) (on disk2 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk3 ?x ?y)
-
-rule: ((on disk4 ?x) (on nothing ?y) (on disk1 ?z) (on disk2 ?z) (on disk3 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk4 ?x ?y)
-rule: ((on disk4 ?x) (on disk5 ?y) (on disk1 ?z) (on disk2 ?z) (on disk3 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk4 ?x ?y)
-
-rule: ((on disk5 ?x) (on nothing ?y) (on disk1 ?z) (on disk2 ?z) (on disk3 ?z) (on disk4 ?z) (not ?x ?y) (not ?x ?z)) -> (movable disk5 ?x ?y)
+rule: ((top disk1 ?source) (not ?source ?target)) -> (movable disk1 ?source ?target)
+rule: ((top disk2 ?source) (top disk1 ?other) (not ?source ?target) (not ?other ?target)) -> (movable disk2 ?source ?target)
+rule: ((top disk3 ?source) (top disk1 ?other) (on disk2 ?other) (not ?source ?target) (not ?other ?target)) -> (movable disk3 ?source ?target)
+rule: ((top disk4 ?source) (top disk1 ?other) (on disk2 ?other) (on disk3 ?other) (not ?source ?target) (not ?other ?target)) -> (movable disk4 ?source ?target)
+rule: ((top disk5 ?source) (top disk1 ?other) (on disk2 ?other) (on disk3 ?other) (on disk4 ?other) (not ?source ?target) (not ?other ?target)) -> (movable disk5 ?source ?target)
