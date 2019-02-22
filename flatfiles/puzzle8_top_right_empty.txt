@@ -28,11 +28,14 @@ fact: (pos tile7 pos1 pos3)
 fact: (pos tile3 pos2 pos3)
 fact: (pos tile2 pos3 pos3)
 
-rule: (adj ?x ?y) -> (adj ?y ?x)
+fact: (not pos1 pos2)
+fact: (not pos2 pos3)
+fact: (not pos1 pos3)
+rule: ((not ?x ?y)) -> (not ?y ?x)
 
 rule: ((pos ?tileA ?x ?y) (pos ?tileB ?x pos2)) -> (adj ?tileA ?tileB)
-rule: ((pos ?tileA ?x pos2) (pos ?tileB ?x ?y)) -> (adj ?tileA ?tileB)
 rule: ((pos ?tileA pos2 ?y) (pos ?tileB ?x ?y)) -> (adj ?tileA ?tileB)
-rule: ((pos ?tileA ?x ?y) (pos ?tileB pos2 ?y)) -> (adj ?tileA ?tileB)
+
+rule: ((adj ?tileA ?tileB)) -> (adj ?tileB ?tileA)
 
 rule: ((pos ?piece ?initialX ?initialY) (pos empty ?targetx ?targety) (adj ?piece empty)) -> (movable ?piece ?initialX ?initialY ?targetx ?targety)

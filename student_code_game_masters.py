@@ -86,7 +86,6 @@ class TowerOfHanoiGame(GameMaster):
             None
         """
 
-        pred = movable_statement.predicate
         sl = movable_statement.terms
         fretract = parse_input("fact: (on " + sl[0].term.element + " " + sl[1].term.element + ")")
         fadd = parse_input("fact: (on " + sl[0].term.element + " " + sl[2].term.element + ")")
